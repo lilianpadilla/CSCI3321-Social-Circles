@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><% title %></title>
+    <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <h1><% title %></h1>
+    <h1><%= title %></h1>
     <ul>
       <% characters.forEach((cha) => { %>
-        <h2><%= cha.Name %></h2>
+        <h2><a href=<%= "char_page/" + cha.ID %> ><%= cha.Name %></a></h2>
       <% }); %>
     </ul>
   </body>
