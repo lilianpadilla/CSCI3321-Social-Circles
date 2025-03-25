@@ -4,17 +4,6 @@ var app = express();
 var router = express.Router();
 const db = require("../database/connection");
 
-router.get("/characters",(req,res) => {
-  console.log("all characters route");
-  let sql = `SELECT * FROM characters;`;
-  db.query(sql,(err,result) => {
-      if(err) throw err;
-      console.log(result);
-      res.render('characters',{title:'Characters',characters:result});
-  })
-  
-});
-
 router.get('/characters/:charID', (req, res) => {
   const characterID = req.params.charID;
   console.log("characters route");
