@@ -1,0 +1,55 @@
+/* General body styling */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    display: flex;
+    flex-direction: column; /* To stack the elements vertically */
+    justify-content: flex-start; /* Align items from the top */
+    background-color: #f4f4f4;
+  }
+  
+  /* Styling for the top-left links */
+  .top-left-links {
+    position: absolute; 
+    top: 20px; 
+    left: 20px; 
+    z-index: 1000; 
+  }
+  
+  .top-left-links h2 {
+    margin: 5px 0; 
+    font-size: 18px;
+    color: #333;
+  }
+  
+  .top-left-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .top-left-links a:hover {
+    color: #007bff; 
+  }
+  
+  /* Canvas container for centering the canvas */
+  .canvas-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+  
+  /* Style for the canvas element */
+  canvas {
+    border: 2px solid #000000;
+    background-color: #ffffff;
+    width: 80%; /* width */
+    height: 80%; /* height */
+    max-width: 800px;
+    max-height: 600px;
+  }
+  

@@ -26,6 +26,24 @@ router.get("/home", (req, res) => {
   res.render('home', { title: 'Homepage' });
 });
 
+
+router.get("/userpage", (req, res) => {
+  console.log("User profile page activated");
+
+  const user = {
+    username: "admin", 
+    email: "admin@example.com", 
+    joinDate: "January 1, 2023"
+  };
+
+  res.render('userpage', {
+    title: 'User Profile',
+    username: user.username,
+    email: user.email,
+    joinDate: user.joinDate
+  });
+});
+
 router.get("/characters", (req, res) => {
   console.log("all characters route");
   let sql = `SELECT * FROM characters;`;
