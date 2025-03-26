@@ -21,7 +21,16 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+
+app._router.stack.forEach((r) => {
+  if (r.route && r.route.path) {
+    console.log("Registered route:", r.route.path);
+  }
+});
+
 app.use('/users', usersRouter);
+
+app.use(express.urlencoded({ extended: true }));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

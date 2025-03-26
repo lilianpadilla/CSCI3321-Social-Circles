@@ -1,33 +1,49 @@
 var express = require('express');
 var mysql = require('mysql2');
-var app = express();
 var router = express.Router();
 const db = require("../database/connection");
 
-router.get("/",(req,res) => {
-  console.log("home page activated");
-  res.render('index',{title:'Homepage'});
+// Login page route
+router.get("/", (req, res) => {
+  console.log("Login page activated");
+  res.render('index', { title: 'Login', error: null });
 });
 
-router.get("/characters",(req,res) => {
+// Login POST handler
+router.post("/login", (req, res) => {
+  const { username, password } = req.body;
+  
+  if (username === "admin" && password === "password") { 
+    res.redirect("/home");
+  } else {
+    res.render("index", { title: "Login", error: "Invalid credentials" });
+  }
+});
+
+// Homepage route (defined outside the POST handler)
+router.get("/home", (req, res) => {
+  console.log("Homepage route activated");
+  res.render('home', { title: 'Homepage' });
+});
+
+router.get("/characters", (req, res) => {
   console.log("all characters route");
   let sql = `SELECT * FROM characters;`;
-  db.query(sql,(err,result) => {
-      if(err) throw err;
-      console.log(result);
-      res.render('characters',{title:'Characters',characters:result});
-  })
-  
+  db.query(sql, (err, result) => {
+    if (err) throw err;
+    console.log(result);
+    res.render('characters', { title: 'Characters', characters: result });
+  });
 });
 
 router.get('/characters/:charID', (req, res) => {
   const characterID = req.params.charID;
   console.log("characters route");
   let sql = `SELECT * FROM characters WHERE ID = ?;`;
-  db.query(sql,[characterID],(err,result) =>{
-    if(err) throw err;
+  db.query(sql, [characterID], (err, result) => {
+    if (err) throw err;
     var row = result[0];
-    res.render('character_page',{title:'Character Page',character:row});
+    res.render('character_page', { title: 'Character Page', character: row });
   });
 });
 
