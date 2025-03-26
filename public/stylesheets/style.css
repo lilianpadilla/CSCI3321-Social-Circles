@@ -2,9 +2,9 @@
 
 body {
   padding: 50px;
-  font: 14px "DM Sans", sans-serif;
+  font: 15px "DM Sans", sans-serif;
 }
-/* Apply styles for the body to center the content */
+
 body {
   display: flex;
   flex-direction: column; 
@@ -24,17 +24,17 @@ body {
 }
 
 .title {
-  max-width: 80%; /* Adjust size */
+  max-width: 80%; 
   height: auto;
-  margin-bottom: 20px; 
+  margin-bottom: 80px; 
 }
 
-/* Style for the pill ish login box */
+/*  pill ish login box */
 .login-box {
   background-color: #d4c369;
   border-radius: 50px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 30px;
+  padding: 25px;
   width: 500px;
   height: 200px; 
   display: flex;
@@ -42,6 +42,7 @@ body {
   justify-content: center;
   align-items: center;
   text-align: center; 
+ 
 }
 
 .login-box form {
@@ -50,6 +51,27 @@ body {
   align-items: center;
   width: 80%; /* Prevents elements from overflowing */
 }
+
+/* "FREE PLAY" button */
+.free-play-button {
+  display: inline-block;
+  padding: 12px 24px;
+  margin-top: 40px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  color: white;
+  background-color: #d4c369; 
+  border: none;
+  border-radius: 25px; 
+  text-decoration: none; 
+  transition: background 0.3s ease-in-out;
+}
+
+.free-play-button:hover {
+  background-color: #388E3C; 
+}
+
 
 /* Style the title */
 h1 {
