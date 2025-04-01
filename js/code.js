@@ -58,6 +58,18 @@ export class Character {
     }
 }
 
-const audi = new Character(2,-1,3)
-const gaming = new Game([audi,audi,audi],[audi,audi,audi],[audi,audi,audi])
-console.log(gaming.score(1, "compliment"))
+export function newGame(char_lst){
+    //ChatGPT generated function to shuffle characters & assign circles randomly
+    for (let i = char_lst.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [char_lst[i], char_lst[j]] = [char_lst[j], char_lst[i]];
+    }
+    let c1 = char_lst.slice(0,3);
+    let c2 = char_lst.slice(3,6);
+    let c3 = char_lst.slice(6,9);
+    return [c1,c2,c3]
+}
+//test code to reuse when jest implemented
+//const audi = new Character(2,-1,3)
+//const gaming = new Game([audi,audi,audi],[audi,audi,audi],[audi,audi,audi])
+//console.log(gaming.score(1, "compliment"))
