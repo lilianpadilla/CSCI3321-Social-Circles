@@ -2,6 +2,7 @@ var express = require('express');
 var mysql = require('mysql2');
 var router = express.Router();
 const db = require("../database/connection");
+const hash = require('../js/cyber.js'); //will add password hash & checks when sign up page exists
 
 // Login page route
 router.get("/", (req, res) => {
@@ -12,12 +13,19 @@ router.get("/", (req, res) => {
 // Login POST handler
 router.post("/login", (req, res) => {
   const { username, password } = req.body;
-  
-  if (username === "admin" && password === "password") { 
-    res.redirect("/home");
-  } else {
-    res.render("index", { title: "Login", error: "Invalid credentials" });
-  }
+  let sql = `SELECT * FROM users WHERE Username = ?;`;
+  db.query(sql,[username], (err, result) => {
+    if (err) throw err;
+    console.log(result);
+    let dbpass = result[0].Password;
+    console.log(dbpass);
+    console.log(password === dbpass);
+    if (password === dbpass) { 
+      res.redirect("/home");
+    } else {
+      res.render("index", { title: "Login", error: "Invalid credentials" });
+    }
+  });
 });
 
 // Homepage route (defined outside the POST handler)
