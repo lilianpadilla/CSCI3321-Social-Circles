@@ -46,7 +46,7 @@ router.post("/login", (req, res) => {
 // Homepage route IF LOGGED IN(defined outside the POST handler)
 router.get("/home", isAuthenticated, function (req, res) {
     console.log("Homepage route LOGGED IN activated");
-    res.render('home', { title: 'Homepage'});
+    res.render('home', { title: 'Homepage', user: req.session.username});
 });
 
 // Homepage route IF NOT LOGGED IN I.E. FREEPLAY... for now identical.
@@ -85,7 +85,7 @@ router.get("/characters", (req, res) => {
   db.query(sql, (err, result) => {
     if (err) throw err;
     console.log(result);
-    res.render('characters', { title: 'Characters', characters: result });
+    res.render('characters', { title: 'Characters', characters: result, user: req.session.username});
   });
 });
 
@@ -96,7 +96,7 @@ router.get('/characters/:charID', (req, res) => {
   db.query(sql, [characterID], (err, result) => {
     if (err) throw err;
     var row = result[0];
-    res.render('character_page', { title: 'Character Page', character: row });
+    res.render('character_page', { title: 'Character Page', character: row, user: req.session.username});
   });
 });
 
