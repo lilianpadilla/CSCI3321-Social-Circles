@@ -43,12 +43,16 @@ router.post("/login", (req, res) => {
   });
 });
 
-// Homepage route (defined outside the POST handler)
-//isAuthenticated,
-//, user: req.session.username
+// Homepage route IF LOGGED IN(defined outside the POST handler)
 router.get("/home", isAuthenticated, function (req, res) {
-    console.log("Homepage route activated");
+    console.log("Homepage route LOGGED IN activated");
     res.render('home', { title: 'Homepage'});
+});
+
+// Homepage route IF NOT LOGGED IN I.E. FREEPLAY... for now identical.
+router.get("/home", function (req, res) {
+  console.log("Homepage route activated");
+  res.render('home', { title: 'Homepage', user: req.session.username});
 });
 
 
