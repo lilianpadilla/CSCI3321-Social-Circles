@@ -46,7 +46,7 @@ router.post("/login", (req, res) => {
 // Homepage route (defined outside the POST handler)
 //isAuthenticated,
 //, user: req.session.username
-router.get("/home",  (req, res) => {
+router.get("/home", isAuthenticated, function (req, res) {
     console.log("Homepage route activated");
     res.render('home', { title: 'Homepage'});
 });
