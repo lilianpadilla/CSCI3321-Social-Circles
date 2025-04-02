@@ -7,7 +7,7 @@ const hash = require('../js/cyber.js'); //will add password hash & checks when s
 
 //function so people cant just type endpoints for user-only pages, e.g. user profile
 function isAuthenticated (req, res, next) {
-  if (req.session.user) next()
+  if (req.session.username) next()
   else next('route')
 }
 
@@ -55,9 +55,9 @@ router.get("/home", function (req, res) {
   res.render('home', { title: 'Homepage', user: req.session.username});
 });
 
-
-router.get("/userpage", (req, res) => {
-  console.log("User profile page activated");
+// Userpage if logged in
+router.get("/userpage", isAuthenticated, (req, res) => {
+  console.log("User profile page attempt, redirected");
 
   const user = {
     username: req.session.username, 
@@ -71,6 +71,12 @@ router.get("/userpage", (req, res) => {
     email: user.email,
     joinDate: user.joinDate
   });
+});
+
+// attempt to reach user page if not logged in, sends to log in screen
+router.get("/userpage", (req, res) => {
+  console.log("User profile page activated");
+  res.render("index", { title: "Login", error: "Please log in to see user profile page." });
 });
 
 router.get("/characters", (req, res) => {
