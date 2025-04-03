@@ -21,6 +21,11 @@ app.use(session({
   }
 }));
 
+app.get('/createuser', (req, res) => {
+  res.render('createuser', { title: 'Create Account' });
+});
+
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');

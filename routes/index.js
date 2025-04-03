@@ -11,6 +11,22 @@ function isAuthenticated (req, res, next) {
   else next('route')
 }
 
+
+
+
+// Handle user registration
+router.post('/register', (req, res) => {
+    const { username, email, password } = req.body;
+
+    // Add database logic here (SQL)
+    
+    console.log(`New user: ${username}, Email: ${email}`);
+
+    res.redirect('/login'); // Redirect to login page after successful registration
+});
+
+module.exports = router;
+
 // Login page route
 router.get("/", (req, res) => {
   console.log("Login page activated");
