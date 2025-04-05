@@ -59,17 +59,40 @@ router.post("/login", (req, res) => {
   });
 });
 
-// Homepage route IF LOGGED IN(defined outside the POST handler)
-router.get("/home", isAuthenticated, function (req, res) {
-    console.log("Homepage route LOGGED IN activated");
-    res.render('home', { title: 'Homepage', user: req.session.username});
-});
-
-// Homepage route IF NOT LOGGED IN I.E. FREEPLAY... for now identical.
 router.get("/home", function (req, res) {
   console.log("Homepage route activated");
-  res.render('home', { title: 'Homepage', user: req.session.username});
+
+  const characters = [
+      { name: "Sam", happiness: 3 },
+      { name: "Alex", happiness: 4 },
+      { name: "Jess", happiness: 2 },
+      { name: "Lee", happiness: 5 },
+      { name: "Taylor", happiness: 1 },
+      { name: "Riley", happiness: 3 },
+      { name: "Jordan", happiness: 4 },
+      { name: "Casey", happiness: 2 },
+      { name: "Morgan", happiness: 3 },
+  ];
+
+  const shuffled = characters.sort(() => Math.random() - 0.5);
+  const circles = [
+      shuffled.slice(0, 3),
+      shuffled.slice(3, 6),
+      shuffled.slice(6, 9)
+  ];
+
+  // If not logged in, show message instead of username
+  const username = req.session.username || null;
+
+  res.render('home', {
+      title: 'Homepage',
+      user: username,
+      circles,
+      message: `Welcome back, ${username}!`
+  });
 });
+
+
 
 // Userpage if logged in
 router.get("/userpage", isAuthenticated, (req, res) => {
