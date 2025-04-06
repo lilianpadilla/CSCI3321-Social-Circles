@@ -11,6 +11,9 @@
     <div class="yellow-circle"></div>
     <div class="container">
         <h2>Create Your Social Circles Account</h2>
+        <% if (typeof error !== 'undefined' && error) { %>
+            <p class="error"><%= error %></p>
+          <% } %>
         <form action="/register" method="POST">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>

@@ -11,18 +11,25 @@ function isAuthenticated (req, res, next) {
   else next('route')
 }
 
-
-
-
 // Handle user registration
 router.post('/register', (req, res) => {
-    const { username, email, password } = req.body;
-
-    // Add database logic here (SQL)
-    
-    console.log(`New user: ${username}, Email: ${email}`);
-
-    res.redirect('/login'); // Redirect to login page after successful registration
+    console.log("Create User page activated")
+    const {username, password} = req.body;
+    console.log(req.body);
+    let sql = `SELECT * FROM users WHERE Username = ?;`;
+    db.query(sql,[username], (err, result) => {
+      if (err){ 
+        throw err;
+      } else if (result.length === 0){ //Username not yet taken case
+        let sql = `INSERT INTO users (Username, Password) VALUES (?,?)`;
+        db.query(sql,[username,password], (err,result) => {
+            if(err) throw err;
+            res.redirect('/');
+        });
+      }else{ //username taken case
+        res.render("createuser", {error: "Username Taken" });
+      }
+    });
 });
 
 module.exports = router;
