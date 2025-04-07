@@ -20,17 +20,20 @@
       <p>Select a circle and choose an action to boost happiness!</p>
 
       <div class="circles-container">
-        <% circles.forEach((group, index) => { %>
+        <% for (let i = 1; i < 4; i++){ %>
+          <%  let group = circles.getCircle(i)%>
+          <%  var index = i%>
           <div class="circle-card">
             <h3>Circle <%= index + 1 %></h3>
             <ul>
-              <% group.forEach(char => { %>
+              <%  group.forEach(char => { %>
                 <li><%= char.name %></li>
-              <% }) %>
+                <%  })%>
             </ul>
 
             <form action="/play" method="POST">
               <input type="hidden" name="circleIndex" value="<%= index %>" />
+              <input type="hidden" name="game" value="<%= circles %>" />
               <select name="action" required>
                 <option value="">Choose an action</option>
                 <option value="compliment">Give Compliment</option>
@@ -40,7 +43,7 @@
               <button type="submit">Go!</button>
             </form>
           </div>
-        <% }) %>
+        <% } %>
       </div>
 
       <% if (message) { %>

@@ -71,7 +71,7 @@ router.get("/home", function (req, res) {
       charr.push(new code.Character(char.Name, char.Compliment,char.Help,char.Invite));
     });
     var game = code.newGame(charr);
-    console.log(game)
+    //console.log(game)
       // If not logged in, show message instead of username
     const username = req.session.username || null;
 
@@ -84,7 +84,21 @@ router.get("/home", function (req, res) {
   });
 });
 
-
+router.post("/play", function (req,res){
+  console.log("scoring route activated");
+  console.log(req.body);
+  const {circleIndex, game, action} = req.body;
+  console.log(game);
+  const gamer = code.Game.fromString(game);
+  const scorey = gamer.score(parseInt(circleIndex), action);
+  console.log(scorey);
+  res.render("home", {
+    title: 'Homepage',
+    user: req.session.username,
+    circles: gamer,
+    message: `Score: ${scorey}!`
+  });
+});
 
 // Userpage if logged in
 router.get("/userpage", isAuthenticated, (req, res) => {
