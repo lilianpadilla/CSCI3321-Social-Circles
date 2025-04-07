@@ -12,9 +12,45 @@
       <h2><a href="/">Back to Login</a></h2>
     </div>
 
-    <!-- Canvas for your game or content -->
-    <div class="canvas-container">
-      <canvas id="gameCanvas"></canvas>
+   
+
+    <!-- Social Circles Game Section -->
+    <div class="social-circles-game">
+      <h2>Play Social Circles</h2>
+      <p>Select a circle and choose an action to boost happiness!</p>
+
+      <div class="circles-container">
+        <% for (let i = 1; i < 4; i++){ %>
+          <%  let group = circles.getCircle(i)%>
+          <%  var index = i%>
+          <div class="circle-card">
+            <h3>Circle <%= index + 1 %></h3>
+            <ul>
+              <%  group.forEach(char => { %>
+                <li><%= char.name %></li>
+                <%  })%>
+            </ul>
+
+            <form action="/play" method="POST">
+              <input type="hidden" name="circleIndex" value="<%= index %>" />
+              <input type="hidden" name="game" value="<%= circles %>" />
+              <select name="action" required>
+                <option value="">Choose an action</option>
+                <option value="compliment">Give Compliment</option>
+                <option value="help">Offer Help</option>
+                <option value="invite">Invite to Event</option>
+              </select>
+              <button type="submit">Go!</button>
+            </form>
+          </div>
+        <% } %>
+      </div>
+
+      <% if (message) { %>
+        <div class="game-message">
+          <p><%= message %></p>
+        </div>
+      <% } %>
     </div>
   </body>
 </html>

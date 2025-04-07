@@ -4,6 +4,7 @@ var router = express.Router();
 const db = require("../database/connection");
 var session = require('express-session');
 const hash = require('../js/cyber.js'); //will add password hash & checks when sign up page exists
+const code = require('../js/code.js');
 
 //function so people cant just type endpoints for user-only pages, e.g. user profile
 function isAuthenticated (req, res, next) {
@@ -66,16 +67,44 @@ router.post("/login", (req, res) => {
   });
 });
 
-// Homepage route IF LOGGED IN(defined outside the POST handler)
-router.get("/home", isAuthenticated, function (req, res) {
-    console.log("Homepage route LOGGED IN activated");
-    res.render('home', { title: 'Homepage', user: req.session.username});
-});
-
-// Homepage route IF NOT LOGGED IN I.E. FREEPLAY... for now identical.
 router.get("/home", function (req, res) {
   console.log("Homepage route activated");
-  res.render('home', { title: 'Homepage', user: req.session.username});
+  let sql = 'SELECT * FROM characters;';
+  db.query(sql, (err, result) => {
+    if (err) throw err;
+    console.log(result);
+    var charr = [];
+    result.forEach((char) =>{
+      charr.push(new code.Character(char.Name, char.Compliment,char.Help,char.Invite));
+    });
+    var game = code.newGame(charr);
+    //console.log(game)
+      // If not logged in, show message instead of username
+    const username = req.session.username || null;
+
+    res.render('home', {
+      title: 'Homepage',
+      user: username,
+      circles: game,
+      message: `Welcome back, ${username}!`
+    });
+  });
+});
+
+router.post("/play", function (req,res){
+  console.log("scoring route activated");
+  console.log(req.body);
+  const {circleIndex, game, action} = req.body;
+  console.log(game);
+  const gamer = code.Game.fromString(game);
+  const scorey = gamer.score(parseInt(circleIndex), action);
+  console.log(scorey);
+  res.render("home", {
+    title: 'Homepage',
+    user: req.session.username,
+    circles: gamer,
+    message: `Score: ${scorey}!`
+  });
 });
 
 // Userpage if logged in
