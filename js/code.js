@@ -17,17 +17,17 @@ export class Game {
             throw new Error("Unacceptable cnum value. Circle number must be 1, 2, or 3.")
         }
         var ret = 0;
-        if(action == "compliment"){
+        if(["Compliment","compliment","C","c"].includes(action)){
             this.dict[c_num].forEach((ch) => {
                 ret += ch.complimentMe();
             });
             return ret;
-        }else if(action == "help"){
+        }else if(["Help","help","H","h".includes(action)]){
             this.dict[c_num].forEach((ch) => {
                 ret += ch.helpMe();
             });
             return ret;
-        }else if(action == "invite"){
+        }else if(["Invite","invite","I","i"].includes(action)){
             this.dict[cnum].forEach((ch) => {
                 ret += ch.inviteMe();
             });
@@ -40,7 +40,8 @@ export class Game {
 
 export class Character {
     //CONSTRUCTOR
-    constructor(compl,help,invite){
+    constructor(name,compl,help,invite){
+        this.name = name;
         this.compl = compl;
         this.help = help;
         this.invite = invite;
@@ -55,6 +56,9 @@ export class Character {
     }
     inviteMe() {
         return this.invite;
+    }
+    getName(){
+        return this.name;
     }
 }
 

@@ -4,6 +4,7 @@ var router = express.Router();
 const db = require("../database/connection");
 var session = require('express-session');
 const hash = require('../js/cyber.js'); //will add password hash & checks when sign up page exists
+const code = require('../js/code.js');
 
 //function so people cant just type endpoints for user-only pages, e.g. user profile
 function isAuthenticated (req, res, next) {
@@ -61,34 +62,25 @@ router.post("/login", (req, res) => {
 
 router.get("/home", function (req, res) {
   console.log("Homepage route activated");
+  let sql = 'SELECT * FROM characters;';
+  db.query(sql, (err, result) => {
+    if (err) throw err;
+    console.log(result);
+    var charr = [];
+    result.forEach((char) =>{
+      charr.push(new code.Character(char.Name, char.Compliment,char.Help,char.Invite));
+    });
+    var game = code.newGame(charr);
+    console.log(game)
+      // If not logged in, show message instead of username
+    const username = req.session.username || null;
 
-  const characters = [
-      { name: "Sam", happiness: 3 },
-      { name: "Alex", happiness: 4 },
-      { name: "Jess", happiness: 2 },
-      { name: "Lee", happiness: 5 },
-      { name: "Taylor", happiness: 1 },
-      { name: "Riley", happiness: 3 },
-      { name: "Jordan", happiness: 4 },
-      { name: "Casey", happiness: 2 },
-      { name: "Morgan", happiness: 3 },
-  ];
-
-  const shuffled = characters.sort(() => Math.random() - 0.5);
-  const circles = [
-      shuffled.slice(0, 3),
-      shuffled.slice(3, 6),
-      shuffled.slice(6, 9)
-  ];
-
-  // If not logged in, show message instead of username
-  const username = req.session.username || null;
-
-  res.render('home', {
+    res.render('home', {
       title: 'Homepage',
       user: username,
-      circles,
+      circles: game,
       message: `Welcome back, ${username}!`
+    });
   });
 });
 
