@@ -53,4 +53,23 @@
       <% } %>
     </div>
   </body>
+  <body>
+    <h1 style="text-align: center;">Weekly Leaderboard</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% leaderboard.forEach((player, index) => { %>
+                <tr>
+                    <td><%= player.Username %></td>
+                    <td><%= player.Score %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</body>
 </html>

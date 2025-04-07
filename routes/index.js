@@ -67,6 +67,35 @@ router.post("/login", (req, res) => {
   });
 });
 
+router.get("/home", isAuthenticated, function (req, res) {
+  console.log("Homepage route activated");
+  let sql = 'SELECT * FROM characters;';
+  db.query(sql, (err, result) => {
+    if (err) throw err;
+    console.log(result);
+    var charr = [];
+    result.forEach((char) =>{
+      charr.push(new code.Character(char.Name, char.Compliment,char.Help,char.Invite));
+    });
+    var game = code.newGame(charr);
+    //console.log(game)
+      // If not logged in, show message instead of username
+    const username = req.session.username || null;
+    let sql2 = 'SELECT User_ID, Username, sum(Score) as "Score" FROM leaderboard JOIN users ON users.ID = leaderboard.User_ID WHERE DatePlayed BETWEEN date_sub(NOW(), Interval 1 week) and NOW() GROUP BY User_ID ORDER BY score DESC;'
+    db.query(sql2, (err2, result2) =>{
+      if (err2) throw err2;
+      console.log(result2);
+      res.render('home', {
+        title: 'Homepage',
+        user: username,
+        circles: game,
+        message: `Welcome back, ${username}!`,
+        leaderboard: result2
+      });
+    });
+  });
+});
+
 router.get("/home", function (req, res) {
   console.log("Homepage route activated");
   let sql = 'SELECT * FROM characters;';
@@ -81,12 +110,44 @@ router.get("/home", function (req, res) {
     //console.log(game)
       // If not logged in, show message instead of username
     const username = req.session.username || null;
+    let sql2 = 'SELECT User_ID, Username, sum(Score) as "Score" FROM leaderboard JOIN users ON users.ID = leaderboard.User_ID WHERE DatePlayed BETWEEN date_sub(NOW(), Interval 1 week) and NOW() GROUP BY User_ID ORDER BY score DESC;'
+    db.query(sql2, (err2, result2) =>{
+      if (err2) throw err2;
+      console.log(result2);
+      res.render('home', {
+        title: 'Homepage',
+        user: username,
+        circles: game,
+        message: `Enjoy Gaming!`,
+        leaderboard: result2
+      });
+    });
+  });
+});
 
+//needs to send info to database
+router.post("/play", isAuthenticated, function (req,res){
+  console.log("scoring route activated");
+  console.log(req.body);
+  const {circleIndex, game, action} = req.body;
+  console.log(game);
+  const gamer = code.Game.fromString(game);
+  const scorey = gamer.score(parseInt(circleIndex), action);
+  console.log(scorey);
+  let sql = `INSERT INTO leaderboard (User_ID, Score) VALUES (?,?)`;
+  db.query(sql,[req.session.userId,scorey], (err,result) => {
+      if(err) throw err;
+   });
+  let sql2 = 'SELECT User_ID, Username, sum(Score) as "Score" FROM leaderboard JOIN users ON users.ID = leaderboard.User_ID WHERE DatePlayed BETWEEN date_sub(NOW(), Interval 1 week) and NOW() GROUP BY User_ID ORDER BY score DESC;'
+  db.query(sql2, (err2, result2) =>{
+    if (err2) throw err2;
+    console.log(result2);
     res.render('home', {
       title: 'Homepage',
-      user: username,
-      circles: game,
-      message: `Welcome back, ${username}!`
+      user: req.session.username,
+      circles: gamer,
+      message: `Score: ${scorey}!`,
+      leaderboard: result2
     });
   });
 });
@@ -99,11 +160,17 @@ router.post("/play", function (req,res){
   const gamer = code.Game.fromString(game);
   const scorey = gamer.score(parseInt(circleIndex), action);
   console.log(scorey);
-  res.render("home", {
-    title: 'Homepage',
-    user: req.session.username,
-    circles: gamer,
-    message: `Score: ${scorey}!`
+  let sql2 = 'SELECT User_ID, Username, sum(Score) as "Score" FROM leaderboard JOIN users ON users.ID = leaderboard.User_ID WHERE DatePlayed BETWEEN date_sub(NOW(), Interval 1 week) and NOW() GROUP BY User_ID ORDER BY score DESC;'
+  db.query(sql2, (err2, result2) =>{
+    if (err2) throw err2;
+    console.log(result2);
+    res.render('home', {
+      title: 'Homepage',
+      user: req.session.username,
+      circles: gamer,
+      message: `Score: ${scorey}!`,
+      leaderboard: result2
+    });
   });
 });
 
