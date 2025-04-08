@@ -18,19 +18,34 @@
         </div>
     
         <div class="profile-card">
-          <img src="/images/profile-placeholder.png" alt="User Avatar">
           <h2><%= username %></h2>
-          <p>Email: <%= email %></p>
           <p>Joined: <%= joinDate %></p>
     
       <div class="user-actions">
         <h2>Actions</h2>
         <ul>
-          <li><a href="/edit-profile">Edit Profile</a></li>
           <li><a href="/change-password">Change Password</a></li>
         </ul>
       </div>
     </div>
-
   </body>
+  <body>
+    <h1 style="text-align: center;">Game History</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Score</th>
+                <th>Date Played</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% scores.forEach((game, index) => { %>
+                <tr>
+                    <td><%= game.Score %></td>
+                    <td><%= game.DatePlayed %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</body>
 </html>
