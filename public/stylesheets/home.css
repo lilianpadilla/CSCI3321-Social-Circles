@@ -87,3 +87,40 @@ body {
   font-weight: bold;
   color: #333;
 }
+
+.leaderboard-container {
+  background: #fffeec;
+  border-radius: 12px;
+  padding: 20px 30px;
+  margin: 30px auto;
+  width: 320px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.leaderboard-container h2 {
+  margin-top: 0;
+  font-size: 1.5em;
+  color: #a0916b;
+}
+
+.leaderboard-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.leaderboard-container th,
+.leaderboard-container td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #b8b190;
+}
+
+.leaderboard-container th {
+  background-color: #c3bf7c;
+  font-weight: bold;
+}
+
+.leaderboard-container tr:last-child td {
+  border-bottom: none;
+}
