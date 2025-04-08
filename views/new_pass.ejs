@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/stylesheets/user_page.css" />
+  </head>
+  <body>
+    <!-- Navigation links  -->
+    <div class="top-left-links">
+      <h2><a href="/">Back to Login</a></h2>
+      <h2><a href="/home">Back to Game</a></h2>
+    </div>
+
+    <!-- User Profile Section -->
+    <div class="container">
+        <div class="header">
+          <h1><%= title %></h1>
+        </div>
+    
+        <div class="profile-card">
+          <h2><%= username %></h2>
+          <p>Joined: <%= joinDate %></p>
+    
+      <div class="user-actions">
+        <h2>Actions</h2>
+        <% if (typeof error !== 'undefined' && error) { %>
+            <p class="error"><%= error %></p>
+          <% } %>
+            <form action="/changed-password" method="POST">
+                <label for="old_password">Old Password:</label>
+                <input type="password" id="old_password" name="old_password" required>
+                <p></p>
+                <label for="new_password">New Password:</label>
+                <input type="password" id="new_password" name="new_password" required>
+                <p></p>
+                <label for="repeat_new_password">New Password:</label>
+                <input type="password" id="repeat_new_password" name="repeat_new_password" required>
+                <p></p>
+                <button type="submit">Sign Up</button>
+            </form>
+      </div>
+    </div>
+  </body>
+</html>
