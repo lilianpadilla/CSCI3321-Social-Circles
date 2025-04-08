@@ -6,7 +6,7 @@
   </head>
 
   <body>
-
+    <div class="confetti-container"></div>
     <div class="login-container">
       <img src="/images/title.png" alt="Title" class="title">
       <div class="login-box">
@@ -29,6 +29,39 @@
 
       </div>
     </div>
+
+    <!-- pretty confettie  -->
+    <script>
+      const colors = ['#FFD700', '#4285F4', '#EA4335']; // Yellow, Blue, Red
+      const container = document.querySelector('.confetti-container');
+    
+      function createConfetti() {
+        const confetti = document.createElement('div');
+        confetti.classList.add('confetti');
+        
+        // Random size and color
+        const size = Math.floor(Math.random() * 8) + 6; 
+        confetti.style.width = `${size}px`;
+        confetti.style.height = `${size}px`;
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        
+        // Random position and animation duration
+        confetti.style.left = `${Math.random() * 100}%`;
+        confetti.style.animationDuration = `${Math.random() * 3 + 2}s`; // 2s to 5s
+        confetti.style.animationDelay = `${Math.random()}s`;
+    
+        container.appendChild(confetti);
+    
+        // Remove confetti after it falls
+        setTimeout(() => {
+          confetti.remove();
+        }, 6000);
+      }
+    
+      // Generate confetti continuously
+      setInterval(createConfetti, 200);
+    </script>
+
     
   </body>
 
