@@ -44,7 +44,7 @@ router.get("/", (req, res) => {
 // Login POST handler
 router.post("/login", (req, res) => {
   const { username, password } = req.body;
-  let sql = `SELECT * FROM users WHERE Username = ?;`;
+  let sql = `SELECT ID, Username, Password, IsAdmin, HasRedo, DATE_FORMAT(JoinDate, "%M %d %Y") AS JoinDate FROM users WHERE Username = ?;`;
   db.query(sql,[username], (err, result) => {
     if (err){ 
       throw err;
@@ -58,6 +58,7 @@ router.post("/login", (req, res) => {
       if (password === dbpass) { 
         req.session.userId = result[0].ID; // Store user ID in the session
         req.session.username = result[0].Username; // Store username
+        req.session.joinDate = result[0].JoinDate; //Store joindate
         res.redirect("/home");
       } else { //Incorrect password case
         res.render("index", { title: "Login", error: "Invalid credentials" });
@@ -177,18 +178,15 @@ router.post("/play", function (req,res){
 // Userpage if logged in
 router.get("/userpage", isAuthenticated, (req, res) => {
   console.log("User profile page attempt, redirected");
-
-  const user = {
-    username: req.session.username, 
-    email: "admin@example.com", 
-    joinDate: "January 1, 2023"
-  };
-
-  res.render('userpage', {
-    title: 'User Profile',
-    username: req.session.username,
-    email: user.email,
-    joinDate: user.joinDate
+  let sql = 'SELECT User_ID, Score, DATE_FORMAT(DatePlayed, "%M %d %Y") as DatePlayed FROM leaderboard WHERE User_ID = ? ORDER BY DatePlayed DESC;';
+  db.query(sql, [req.session.userId], (err, result) => {
+    if (err) throw err;
+    res.render('userpage', {
+      title: 'User Profile',
+      username: req.session.username,
+      joinDate: req.session.joinDate,
+      scores: result
+    });
   });
 });
 
