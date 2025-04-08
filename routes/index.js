@@ -146,13 +146,21 @@ router.post("/play", isAuthenticated, function (req,res){
   let sql2 = 'SELECT User_ID, Username, sum(Score) as "Score" FROM leaderboard JOIN users ON users.ID = leaderboard.User_ID WHERE DatePlayed BETWEEN date_sub(NOW(), Interval 1 week) and NOW() GROUP BY User_ID ORDER BY score DESC;'
   db.query(sql2, (err2, result2) =>{
     if (err2) throw err2;
-    console.log(result2);
-    res.render('home', {
-      title: 'Homepage',
-      user: req.session.username,
-      circles: gamer,
-      message: `Score: ${scorey}!`,
-      leaderboard: result2
+    let sql3 = 'SELECT * FROM characters;';
+    db.query(sql3, (err3, result3) => {
+      if (err3) throw err3;
+      console.log(result3);
+      var charr = [];
+      result3.forEach((char) =>{
+        charr.push(new code.Character(char.Name, char.Compliment,char.Help,char.Invite));
+      });
+      res.render('home', {
+        title: 'Homepage',
+        user: req.session.username,
+        circles: code.newGame(charr),
+        message: `Score: ${scorey}!`,
+        leaderboard: result2
+      });
     });
   });
 });
@@ -168,13 +176,21 @@ router.post("/play", function (req,res){
   let sql2 = 'SELECT User_ID, Username, sum(Score) as "Score" FROM leaderboard JOIN users ON users.ID = leaderboard.User_ID WHERE DatePlayed BETWEEN date_sub(NOW(), Interval 1 week) and NOW() GROUP BY User_ID ORDER BY score DESC;'
   db.query(sql2, (err2, result2) =>{
     if (err2) throw err2;
-    console.log(result2);
-    res.render('home', {
-      title: 'Homepage',
-      user: req.session.username,
-      circles: gamer,
-      message: `Score: ${scorey}!`,
-      leaderboard: result2
+    let sql3 = 'SELECT * FROM characters;';
+    db.query(sql3, (err3, result3) => {
+      if (err3) throw err3;
+      console.log(result3);
+      var charr = [];
+      result3.forEach((char) =>{
+        charr.push(new code.Character(char.Name, char.Compliment,char.Help,char.Invite));
+      });
+      res.render('home', {
+        title: 'Homepage',
+        user: req.session.username,
+        circles: code.newGame(charr),
+        message: `Score: ${scorey}!`,
+        leaderboard: result2
+      });
     });
   });
 });
