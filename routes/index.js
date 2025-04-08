@@ -3,7 +3,7 @@ var mysql = require('mysql2');
 var router = express.Router();
 const db = require("../database/connection");
 var session = require('express-session');
-const hash = require('../js/cyber.js'); //will add password hash & checks when sign up page exists
+const bcrypt = require('bcrypt');
 const code = require('../js/code.js');
 
 //function so people cant just type endpoints for user-only pages, e.g. user profile
@@ -22,10 +22,13 @@ router.post('/register', (req, res) => {
       if (err){ 
         throw err;
       } else if (result.length === 0){ //Username not yet taken case
-        let sql = `INSERT INTO users (Username, Password) VALUES (?,?)`;
-        db.query(sql,[username,password], (err,result) => {
+        bcrypt.hash(password, 5, function(err, hash) {
+          if(err) throw err;
+          let sql = `INSERT INTO users (Username, Password) VALUES (?,?)`;
+          db.query(sql,[username,hash], (err,result) => {
             if(err) throw err;
             res.redirect('/');
+          });
         });
       }else{ //username taken case
         res.render("createuser", {error: "Username Taken" });
@@ -51,20 +54,21 @@ router.post("/login", (req, res) => {
     } else if (result.length === 0){ //Username not found case
       res.render("index", { title: "Login", error: "Invalid credentials" })
     }else{
-      console.log(result);
-      let dbpass = result[0].Password;
-      //console.log(dbpass);
-      console.log(password === dbpass);
-      if (password === dbpass) { 
-        req.session.userId = result[0].ID; // Store user ID in the session
-        req.session.username = result[0].Username; // Store username
-        req.session.joinDate = result[0].JoinDate; //Store joindate
-        res.redirect("/home");
-      } else { //Incorrect password case
-        res.render("index", { title: "Login", error: "Invalid credentials" });
-      }
+      bcrypt.hash(password, 5, function(err, hash) {
+        if (err) throw err;
+        bcrypt.compare(password, hash, function(err2, result2) {
+          if (err2) throw err2;
+          if(result2){
+            req.session.userId = result[0].ID; // Store user ID in the session
+            req.session.username = result[0].Username; // Store username
+            req.session.joinDate = result[0].JoinDate; //Store joindate
+            res.redirect("/home");
+          } else { //Incorrect password case
+            res.render("index", { title: "Login", error: "Invalid credentials" });
+          }
+        });
+      });
     }
-    
   });
 });
 
