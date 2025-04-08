@@ -110,3 +110,35 @@ p.error {
   color: red;
   font-size: 14px;
 }
+/* Circle Buttons on the side */
+.side-circles {
+  position: fixed;
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  z-index: 999;
+}
+
+.circle-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 100px;
+  background-color: #ffd966;
+  color: #333;
+  text-decoration: none;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 18px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.circle-button:hover {
+  background-color: #f4c542;
+  transform: scale(1.1);
+}
