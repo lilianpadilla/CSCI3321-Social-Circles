@@ -232,7 +232,7 @@ router.get('/change-password', isAuthenticated, (req,res) => {
 
 router.get('/change-password', (req,res) => {
   console.log("User profile page activated");
-  res.render("index", { title: "Login", error: "Please log in to see user profile page." });
+  res.render("index", { title: "Login", error: "Please log in to see user profile page." }); // need fix plz
 });
 
 router.post("/changed-password", isAuthenticated, (req,res) =>{
