@@ -2,11 +2,12 @@ var mysql = require('mysql2');
 require('dotenv').config();
 
 var database = mysql.createConnection({
-    host: process.env.DATABASE_host,
-    user: process.env.user,
-    password: process.env.password,
-    database: process.env.database
+    host: process.env.AZURE_MYSQL_HOST,
+    user: process.env.AZURE_MYSQL_USER,
+    password: process.env.AZURE_MYSQL_PASSWORD,
+    database: process.env.AZURE_MYSQL_DATABASE
   });
+
   
   database.connect((err => {
     if (err) throw err;
