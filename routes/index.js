@@ -6,11 +6,27 @@ var session = require('express-session');
 const bcrypt = require('bcrypt');
 const code = require('../js/code.js');
 
+const schedule = require('node-schedule');
+
+
 //function so people cant just type endpoints for user-only pages, e.g. user profile
 function isAuthenticated (req, res, next) {
   if (req.session.username) next()
   else next('route')
 }
+
+function removeolddata() {
+    let sql = 'DELETE FROM leaderboard WHERE DatePlayed < now() - INTERVAL 14 day'
+    db.query(sql,(err,result) => {
+      if (err){ 
+        throw err;
+      } else {
+        console.log('this is what you asked for heavy is the crown')
+      }
+    })
+}
+
+const job = schedule.scheduleJob('****7', removeolddata());
 
 // Handle user registration
 router.post('/register', (req, res) => {
