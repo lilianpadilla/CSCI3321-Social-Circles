@@ -15,6 +15,7 @@ function isAuthenticated (req, res, next) {
   else next('route')
 }
 
+//function to remove old data( >two weeks) from leaderboard
 function removeolddata() {
     let sql = 'DELETE FROM leaderboard WHERE DatePlayed < now() - INTERVAL 14 day'
     db.query(sql,(err,result) => {
@@ -26,6 +27,7 @@ function removeolddata() {
     })
 }
 
+//schedules to remove old( >two weeks) leaderboard data on sunday 00:00 
 const job = schedule.scheduleJob('****7', removeolddata());
 
 // Handle user registration
