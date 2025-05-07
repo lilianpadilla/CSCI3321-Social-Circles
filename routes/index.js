@@ -28,7 +28,7 @@ function removeolddata() {
 }
 
 //schedules to remove old( >two weeks) leaderboard data on sunday 00:00 
-const job = schedule.scheduleJob('****7', removeolddata());
+const job = schedule.scheduleJob('****7', removeolddata);
 
 // Handle user registration
 router.post('/register', (req, res) => {
@@ -314,6 +314,17 @@ router.get('/characters/:charID', (req, res) => {
     if (err) throw err;
     var row = result[0];
     res.render('character_page', { title: 'Character Page', character: row, user: req.session.username});
+  });
+});
+
+
+router.get('/logout', (req,res)=>{
+  req.session.destroy(err =>{
+    if (err){
+      (console.error('logout err:',err))
+      return res.redirect('/home');
+    }
+    res.redirect('/');
   });
 });
 
